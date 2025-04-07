@@ -1,0 +1,59 @@
+-- הכנסת נתונים לטבלת Customer
+INSERT INTO Customer (customer_id, c_name, c_phone_, c_email, c_address_, customer_type) 
+VALUES (1, 'David Cohen', '052-1234567', 'david@example.com', 'Herzl 12, Tel Aviv', 1);
+
+INSERT INTO Customer (customer_id, c_name, c_phone_, c_email, c_address_, customer_type) 
+VALUES (2, 'Lea Levi', '053-7654321', 'lea@example.com', 'Ben Gurion 10, Haifa', 2);
+
+INSERT INTO Customer (customer_id, c_name, c_phone_, c_email, c_address_, customer_type) 
+VALUES (3, 'Ron Shapira', '054-9876543', 'ron@example.com', 'Rothschild 22, Jerusalem', 1);
+
+-- הכנסת נתונים לטבלת Product
+INSERT INTO Product (product_id_, product_name_, wine_type_, p_year_, p_price) 
+VALUES (101, 'Merlot', 'Red', 2019, 55.00);
+
+INSERT INTO Product (product_id_, product_name_, wine_type_, p_year_, p_price) 
+VALUES (102, 'Chardonnay', 'White', 2021, 60.00);
+
+INSERT INTO Product (product_id_, product_name_, wine_type_, p_year_, p_price) 
+VALUES (103, 'Cabernet Sauvignon', 'Red', 2018, 70.00);
+
+-- הכנסת נתונים לטבלת CS_Employee
+INSERT INTO CS_Employee (employee_id_, e_name_, e_role_, e_email_, e_phone_) 
+VALUES (201, 'Noa Bar', 'Customer Support', 'noa@example.com', '055-1112233');
+
+INSERT INTO CS_Employee (employee_id_, e_name_, e_role_, e_email_, e_phone_) 
+VALUES (202, 'Avi Mizrahi', 'Technical Support', 'avi@example.com', '056-3344556');
+
+INSERT INTO CS_Employee (employee_id_, e_name_, e_role_, e_email_, e_phone_) 
+VALUES (203, 'Dana Azulay', 'Manager', 'dana@example.com', '057-7788990');
+
+-- הכנסת נתונים לטבלת Shipment
+INSERT INTO Shipment (shipment_id_, shipping_company_, departure_date_, estimated_delivery_date_, shipment_status) 
+VALUES (301, 'UPS', TO_DATE('2024-03-10', 'YYYY-MM-DD'), TO_DATE('2024-03-15', 'YYYY-MM-DD'), 'In Transit');
+
+INSERT INTO Shipment (shipment_id_, shipping_company_, departure_date_, estimated_delivery_date_, shipment_status) 
+VALUES (302, 'FedEx', TO_DATE('2024-03-12', 'YYYY-MM-DD'), TO_DATE('2024-03-18', 'YYYY-MM-DD'), 'Pending');
+
+INSERT INTO Shipment (shipment_id_, shipping_company_, departure_date_, estimated_delivery_date_, shipment_status) 
+VALUES (303, 'DHL', TO_DATE('2024-03-15', 'YYYY-MM-DD'), TO_DATE('2024-03-20', 'YYYY-MM-DD'), 'Delivered');
+
+-- הכנסת נתונים לטבלת Complaint
+INSERT INTO Complaint (complaint_id_, complaint_date_, description_, complaint_status, resolution_date_, customer_id, employee_id_) 
+VALUES (401, TO_DATE('2024-03-05', 'YYYY-MM-DD'), 'Late delivery', 'Open', TO_DATE('2024-03-12', 'YYYY-MM-DD'), 1, 201);
+
+INSERT INTO Complaint (complaint_id_, complaint_date_, description_, complaint_status, resolution_date_, customer_id, employee_id_) 
+VALUES (402, TO_DATE('2024-03-07', 'YYYY-MM-DD'), 'Wrong product sent', 'Resolved', TO_DATE('2024-03-10', 'YYYY-MM-DD'), 2, 202);
+
+INSERT INTO Complaint (complaint_id_, complaint_date_, description_, complaint_status, resolution_date_, customer_id, employee_id_) 
+VALUES (403, TO_DATE('2024-03-09', 'YYYY-MM-DD'), 'Damaged product', 'Open', TO_DATE('2024-03-14', 'YYYY-MM-DD'), 3, 203);
+
+-- הכנסת נתונים לטבלת Order
+INSERT INTO "Order" (order_id_, order_date_, status_, total_amount_, payment_method_, payment, product_id_, customer_id, shipment_id_, complaint_id_) 
+VALUES (501, TO_DATE('2024-03-01', 'YYYY-MM-DD'), 'Shipped', 110.00, 'Credit Card', 110.00, 101, 1, 301, 401);
+
+INSERT INTO "Order" (order_id_, order_date_, status_, total_amount_, payment_method_, payment, product_id_, customer_id, shipment_id_, complaint_id_) 
+VALUES (502, TO_DATE('2024-03-02', 'YYYY-MM-DD'), 'Processing', 120.00, 'PayPal', 120.00, 102, 2, 302, NULL);
+
+INSERT INTO "Order" (order_id_, order_date_, status_, total_amount_, payment_method_, payment, product_id_, customer_id, shipment_id_, complaint_id_) 
+VALUES (503, TO_DATE('2024-03-03', 'YYYY-MM-DD'), 'Delivered', 70.00, 'Bank Transfer', 70.00, 103, 3, 303, 403);

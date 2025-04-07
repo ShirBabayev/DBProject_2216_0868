@@ -1,0 +1,17 @@
+-- הצגת כל הנתונים מטבלת Customer
+SELECT * FROM Customer;
+
+-- הצגת כל הנתונים מטבלת Product
+SELECT * FROM Product;
+
+-- הצגת כל הנתונים מטבלת CS_Employee
+SELECT * FROM CS_Employee;
+
+-- הצגת כל הנתונים מטבלת Shipment
+SELECT * FROM Shipment;
+
+-- הצגת כל הנתונים מטבלת Complaint
+SELECT * FROM Complaint;
+
+-- הצגת כל הנתונים מטבלת Order
+SELECT * FROM "Order";  -- שם הטבלה בתוך גרשיים כי Order היא מילה שמורה ב-SQL

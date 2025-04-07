@@ -1,0 +1,73 @@
+CREATE TABLE Customer
+(
+  customer_id INT NOT NULL,
+  c_name VARCHAR2(100) NOT NULL,
+  c_phone_ VARCHAR2(20) NOT NULL,
+  c_email VARCHAR2(100) NOT NULL,
+  c_address_ VARCHAR2(255) NOT NULL,
+  customer_type INT NOT NULL,
+  PRIMARY KEY (customer_id)
+);
+
+CREATE TABLE Product
+(
+  product_id_ INT NOT NULL,
+  product_name_ VARCHAR2(100) NOT NULL,
+  wine_type_ VARCHAR2(50) NOT NULL,
+  p_year_ INT NOT NULL,
+  p_price NUMERIC(10,2) NOT NULL,
+  PRIMARY KEY (product_id_)
+);
+
+CREATE TABLE CS_Employee
+(
+  employee_id_ INT NOT NULL,
+  e_name_ VARCHAR2(100) NOT NULL,
+  e_role_ VARCHAR2(50) NOT NULL,
+  e_email_ VARCHAR2(100) NOT NULL,
+  e_phone_ VARCHAR2(20) NOT NULL,
+  PRIMARY KEY (employee_id_)
+);
+
+CREATE TABLE Shipment
+(
+  shipment_id_ INT NOT NULL,
+  shipping_company_ VARCHAR2(100) NOT NULL,
+  departure_date_ DATE NOT NULL,
+  estimated_delivery_date_ DATE NOT NULL,
+  shipment_status VARCHAR2(50) NOT NULL,
+  PRIMARY KEY (shipment_id_)
+);
+
+CREATE TABLE Complaint
+(
+  complaint_id_ INT NOT NULL,
+  complaint_date_ DATE NOT NULL,
+  description_ VARCHAR2(500) NOT NULL,
+  complaint_status VARCHAR2(50) NOT NULL,
+  resolution_date_ DATE NOT NULL,
+  customer_id INT NOT NULL,
+  employee_id_ INT NOT NULL,
+  PRIMARY KEY (complaint_id_),
+  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+  FOREIGN KEY (employee_id_) REFERENCES CS_Employee(employee_id_)
+);
+
+CREATE TABLE Order
+(
+  order_id_ INT NOT NULL,
+  order_date_ DATE NOT NULL,
+  status_ VARCHAR2(50) NOT NULL,
+  total_amount_ NUMERIC(10,2) NOT NULL,
+  payment_method_ VARCHAR2(50) NOT NULL,
+  payment NUMERIC(10,2) NOT NULL,
+  product_id_ INT NOT NULL,
+  customer_id INT NOT NULL,
+  shipment_id_ INT NOT NULL,
+  complaint_id_ INT,  -- **לא חובה** כי לא כל הזמנה קשורה לתלונה
+  PRIMARY KEY (order_id_),
+  FOREIGN KEY (product_id_) REFERENCES Product(product_id_),
+  FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+  FOREIGN KEY (shipment_id_) REFERENCES Shipment(shipment_id_),
+  FOREIGN KEY (complaint_id_) REFERENCES Complaint(complaint_id_)
+);
