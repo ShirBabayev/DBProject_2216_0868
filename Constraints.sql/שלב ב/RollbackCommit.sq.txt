@@ -1,0 +1,14 @@
+COMMIT;
+
+BEGIN;
+
+INSERT INTO "Order"
+VALUES (    502,    DATE '2025-05-02',    'pending',
+    500,    'Cash',    50000,    1,    1,    1,    NULL);
+
+
+ROLLBACK;
+
+SELECT o.order_id_
+FROM "Order" o
+WHERE o.order_id_ = 502

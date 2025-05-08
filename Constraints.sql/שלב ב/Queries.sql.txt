@@ -1,0 +1,159 @@
+1.
+SELECT 
+  c.c_name,
+  cs.e_name_ AS employee_name,
+  cmp.description_
+FROM Complaint cmp
+JOIN Customer c ON cmp.customer_id = c.customer_id
+JOIN CS_Employee cs ON cmp.employee_id_ = cs.employee_id_
+WHERE EXTRACT(MONTH FROM cmp.complaint_date_) = 3
+ORDER BY cmp.complaint_date_ DESC
+
+2.
+SELECT 
+    p.wine_type_,
+    COUNT(o.order_id_) AS number_of_orders,
+    SUM(o.total_amount_) AS total_revenue
+FROM "Order" o
+JOIN Product p ON o.product_id_ = p.product_id_
+GROUP BY p.wine_type_
+ORDER BY total_revenue DESC;
+
+
+
+3.
+SELECT 
+  cmp.complaint_id_,
+  cs.e_name_ AS employee_name,
+  cmp.complaint_status,
+  cmp.complaint_date_,
+  cmp.resolution_date_,
+  (cmp.resolution_date_ - cmp.complaint_date_) AS resolution_days
+FROM Complaint cmp
+JOIN CS_Employee cs ON cmp.employee_id_ = cs.employee_id_
+WHERE (cmp.resolution_date_ - cmp.complaint_date_) < 7
+ORDER BY resolution_days;
+
+
+4.
+SELECT 
+  payment_method_,
+  COUNT(*) AS num_orders,
+  ROUND(AVG(payment), 2) AS avg_payment
+FROM "Order"
+GROUP BY payment_method_
+HAVING COUNT(*) > 1
+ORDER BY avg_payment DESC;
+
+
+5.
+SELECT 
+  o.order_id_,
+  s.departure_date_,
+  s.estimated_delivery_date_,
+  CURRENT_DATE - s.estimated_delivery_date_ AS delay_days,
+  s.shipment_status
+FROM "Order" o
+JOIN Shipment s ON o.shipment_id_ = s.shipment_id_
+JOIN Customer c ON o.customer_id = c.customer_id
+WHERE CURRENT_DATE > s.estimated_delivery_date_
+AND s.shipment_status != 'Delivered'
+ORDER BY s.estimated_delivery_date_ ASC;
+
+
+
+6.
+SELECT 
+  EXTRACT(YEAR FROM order_date_) AS year,
+  EXTRACT(MONTH FROM order_date_) AS month,
+  COUNT(*) AS total_orders,
+  SUM(total_amount_) AS total_income
+FROM "Order"
+WHERE order_date_ >= (CURRENT_DATE - INTERVAL '1 year')
+GROUP BY year, month
+ORDER BY year, month;
+
+
+7.
+SELECT 
+  c.customer_id,
+  c.c_name,
+  SUM(o.total_amount_) AS total_spent
+FROM "Order" o
+JOIN Customer c ON o.customer_id = c.customer_id
+GROUP BY c.customer_id, c.c_name
+HAVING SUM(o.total_amount_) > (
+  SELECT AVG(total_spent)
+  FROM (
+    SELECT SUM(total_amount_) AS total_spent
+    FROM "Order"
+    GROUP BY customer_id
+  ) AS customer_totals
+)
+ORDER BY total_spent DESC;
+
+
+
+8.
+SELECT 
+  cs.employee_id_,
+  cs.e_name_ AS employee_name,
+  COUNT(cmp.complaint_id_) AS total_complaints
+FROM CS_Employee cs
+JOIN Complaint cmp ON cs.employee_id_ = cmp.employee_id_
+GROUP BY cs.employee_id_, cs.e_name_
+ORDER BY total_complaints DESC
+LIMIT 5;
+
+9.
+UPDATE Complaint
+SET complaint_status = 'Overdue'
+WHERE complaint_status != 'Closed'
+AND CURRENT_DATE - complaint_date_ > 120;
+
+10.
+UPDATE Product
+SET p_price = p_price * 1.10
+WHERE p_year_ < EXTRACT(YEAR FROM CURRENT_DATE) - 5;
+
+
+11.
+UPDATE Shipment
+SET shipment_status = 'Delayed'
+WHERE shipment_status != 'Delivered'
+AND estimated_delivery_date_ < CURRENT_DATE;
+
+
+
+12.
+DELETE FROM Complaint
+WHERE complaint_status = 'Closed'
+  AND resolution_date_ < CURRENT_DATE - INTERVAL '3 months'
+  AND complaint_id_ NOT IN (
+    SELECT complaint_id_
+    FROM "Order"
+    WHERE complaint_id_ IS NOT NULL
+  );
+
+
+13.
+DELETE FROM Customer
+WHERE customer_id NOT IN (
+  SELECT DISTINCT customer_id FROM "Order"
+)
+AND customer_id NOT IN (
+  SELECT DISTINCT customer_id FROM Complaint
+);
+
+
+
+14.
+DELETE FROM Product
+WHERE p_price <= 100
+  AND product_id_ NOT IN (
+    SELECT DISTINCT product_id_
+    FROM "Order"
+  );
+
+
+

@@ -1,0 +1,12 @@
+ALTER TABLE "Order"
+ADD CONSTRAINT check_order_amount_positive CHECK (total_amount_ > 0);
+
+
+ALTER TABLE Shipment
+ALTER COLUMN shipment_status SET DEFAULT 'Pending';
+
+
+ALTER TABLE CS_Employee
+ADD CONSTRAINT unique_employee_phone UNIQUE (e_phone_);
+
+
